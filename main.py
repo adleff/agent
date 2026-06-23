@@ -13,7 +13,7 @@ client = genai.Client(api_key=api_key)
 contents = "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum."
 
 response = client.models.generate_content(
-    model="gemini-1.5-flash",
+    model="gemini-2.5-flash",
     contents=contents,
 )
-print(response)
+print(response.text)
