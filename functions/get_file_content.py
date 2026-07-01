@@ -1,6 +1,6 @@
 import os
 
-import config
+from config import MAX_CHARS
 
 
 def get_file_content(working_directory: str, file_path: str) -> str:
@@ -16,10 +16,10 @@ def get_file_content(working_directory: str, file_path: str) -> str:
             return f'Error: File not found or is not a regular file: "{file_path}"'
 
         with open(file_abs, "r") as f:
-            content = f.read(config.MAX_CHARS)
+            content = f.read(MAX_CHARS)
             if f.read(1):
                 content += f'[...File "{file_path}" truncated'
-                content += f" at {config.MAX_CHARS} characters]"
+                content += f" at {MAX_CHARS} characters]"
             return content
 
     except Exception as e:
