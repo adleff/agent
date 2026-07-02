@@ -7,10 +7,10 @@ from dotenv import load_dotenv
 # from google.genai import types
 from openai import OpenAI
 
-parser = argparse.ArgumentParser(description="Chatbot")
-parser.add_argument("user_prompt", type=str, help="User prompt")
-parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
-args = parser.parse_args()
+# parser = argparse.ArgumentParser(description="Chatbot")
+# parser.add_argument("user_prompt", type=str, help="User prompt")
+# parser.add_argument("--verbose", action="store_true", help="Enable verbose output")
+# args = parser.parse_args()
 # contents = args.user_prompt
 
 # messages: list[types.Content] = [
@@ -30,7 +30,10 @@ client = OpenAI(
 response = client.chat.completions.create(
     model="openrouter/free",
     messages=[
-        {"role": "user", "content": args.user_prompt},
+        {
+            "role": "user",
+            "content": "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.",
+        },
     ],
 )
 
