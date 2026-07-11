@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 from openai import OpenAI
 
+from call_function import available_functions
 from prompts import system_prompt
 
 load_dotenv()
@@ -24,12 +25,20 @@ messages = [
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
     api_key=api_key,
+    tools=available_functions,
 )
 response = client.chat.completions.create(
     model="openrouter/free",
     messages=messages,
     temperature=0,
 )
+
+message = response.choices[0].message
+if message.tool_calls:
+    for tool_call in message.tool_calls:
+        function_args = json.loads(tool_call.function.arguments or "{}")
+        print(f"Calling function: {tool_call.function.name}({function_args})")
+
 
 if not response.usage:
     raise RuntimeError("no usage metadata returned")
