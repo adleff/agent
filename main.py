@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 from call_function import call_function, available_functions
 from llm import generate
@@ -14,16 +15,25 @@ messages = [
     {"role": "user", "content": args.user_prompt},
 ]
 
-message = generate(messages, available_functions)
-messages.append(message)
+for _ in range(20):
 
-if message.tool_calls:
-    for tool_call in message.tool_calls:
-        if tool_call.type == "function":
-            result_message = call_function(tool_call, verbose=args.verbose)
-            print(f"-> {result_message['content']}")
-            if not result_message["content"]:
-                raise Exception("tool call returned empty content")
-            messages.append(result_message)
+    message = generate(messages, available_functions)
+    messages.append(message)
+
+    if message.tool_calls:
+        for tool_call in message.tool_calls:
+            if tool_call.type == "function":
+                result_message = call_function(tool_call, verbose=args.verbose)
+                if not result_message["content"]:
+                    raise Exception("tool call returned empty content")
+                messages.append(result_message)
+    elif message.content:
+        print("Final response:")
+        print(message.content)
+        break
+    else:
+        print("No content returned")
+        sys.exit(1)
 else:
-    print(message.content)
+    print("No final response")
+    sys.exit(1)
