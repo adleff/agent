@@ -1,6 +1,8 @@
 import os
+from openai.types.chat import ChatCompletionToolParam
 
-schema_write_file = {
+
+schema_write_file: ChatCompletionToolParam = {
     "type": "function",
     "function": {
         "name": "write_file",
