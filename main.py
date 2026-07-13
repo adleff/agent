@@ -1,6 +1,7 @@
 import argparse
 import json
 import os
+from call_function import call_function
 
 
 from dotenv import load_dotenv
@@ -38,7 +39,13 @@ message = response.choices[0].message
 if message.tool_calls:
     for tool_call in message.tool_calls:
         function_args = json.loads(tool_call.function.arguments or "{}")
-        print(f"Calling function: {tool_call.function.name}({function_args})")
+        result_message = call_function(tool_call.function.name, function_args)
+        if not result_message.content:
+            raise Exception("tool call returned empty content")
+        if args.verbose:
+        #    print(f"Tool call: {tool_call.function.name}")
+            print(f"-> {result_message['content']}")
+        messages.append(result_message)
 else:
     print(response.choices[0].message.content)
 
